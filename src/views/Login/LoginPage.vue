@@ -4,14 +4,14 @@
             <ion-img src="assets/images/nemesis.png"></ion-img>
             <ion-item>
                 <ion-icon slot="start" :icon="person"></ion-icon>
-                <ion-input label="Usuario" label-placement="floating"></ion-input>
+                <ion-input v-model="user.email" label="Usuario" label-placement="floating"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-icon :icon="lockClosed" slot="start"></ion-icon>
-                <ion-input label="Contraseña" label-placement="floating"></ion-input>
+                <ion-input v-model="user.password" label="Contraseña" label-placement="floating"></ion-input>
             </ion-item>
             <div class="login-button-container">
-                <ion-button>Iniciar Sesión</ion-button>
+                <ion-button @click="login()">Iniciar Sesión</ion-button>
             </div>
             <div class="footer ion-padding">
                 <ion-button :router-link="{ name: 'Config' }" size="small" color="dark">
@@ -26,8 +26,25 @@
 import { IonPage, IonContent, IonImg, IonItem, IonInput, IonIcon, IonButton, IonRouterOutlet } from '@ionic/vue';
 import { person, lockClosed, cog } from 'ionicons/icons';
 
+// Router
 import { useRouter } from 'vue-router';
 const router = useRouter();
+
+// Global Store
+import { useMainStore } from '@/store/index';
+const main = useMainStore();
+
+
+// Local Store
+const user = {
+    email: "",
+    password: ""
+}
+
+async function login() {
+    main.http({ service: 'common', method: 'login', args: [main.server.database, user.email, user.password] })
+}
+
 
 
 </script>
