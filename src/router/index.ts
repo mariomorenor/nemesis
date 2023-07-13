@@ -3,6 +3,9 @@ import { RouteRecordRaw } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import LoginPage from '../views/Login/LoginPage.vue';
 
+import { useMainStore } from '@/store/index';
+
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -11,7 +14,15 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/home',
     name: 'Home',
-    component: HomePage
+    component: HomePage,
+    beforeEnter: async (to, from, next) => {
+      const main = useMainStore();
+      
+      if (!main.login) {
+        next({ name: 'Login' })
+      }
+
+    }
   },
   {
     path: '/login',
@@ -19,15 +30,17 @@ const routes: Array<RouteRecordRaw> = [
     component: LoginPage,
   },
   {
-    path:'/config',
-    name:'Config',
-    component: ()=> import('../views/Login/Config.vue')
+    path: '/config',
+    name: 'Config',
+    component: () => import('../views/Login/Config.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
-})
+});
+
+
 
 export default router
