@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import { getPlatforms, isPlatform, toastController } from '@ionic/vue';
+import { getPlatforms, toastController } from '@ionic/vue';
 import { CapacitorHttp as Http, HttpOptions } from '@capacitor/core';
 
 export const useMainStore = defineStore('main', {
@@ -42,8 +42,7 @@ export const useMainStore = defineStore('main', {
             }
 
             const response = await Http.request(options);
-            console.log(response);
-
+            return response;
 
         }
     }

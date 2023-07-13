@@ -42,7 +42,18 @@ const user = {
 }
 
 async function login() {
-    main.http({ service: 'common', method: 'login', args: [main.server.database, user.email, user.password] })
+    const { data } = await main.http({ service: 'common', method: 'login', args: [main.server.database, user.email, user.password] });
+
+    if (data.hasOwnProperty('error')) {
+        main.presentToast({ message: "Ocurrió un error" })
+        return;
+    }
+
+    if (data.result == false) {
+        main.presentToast({ message: "Credenciales Inválidas" })
+        return;
+    }
+
 }
 
 
