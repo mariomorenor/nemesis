@@ -1,0 +1,7 @@
+{
+  "name": "nemesis",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
