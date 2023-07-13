@@ -9,6 +9,11 @@ export default defineConfig({
     vue(),
     legacy()
   ],
+  server:{
+    proxy:{
+      '/jsonrpc': 'http://localhost:8069'
+    }
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
