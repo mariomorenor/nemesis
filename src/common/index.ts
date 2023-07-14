@@ -1,11 +1,11 @@
 import { getPlatforms, toastController } from '@ionic/vue';
-import { CapacitorHttp as Http, HttpOptions } from '@capacitor/core';
+import { ExceptionCode, CapacitorHttp as Http, HttpOptions, HttpResponse } from '@capacitor/core';
 
 import { Storage } from '@ionic/storage';
 const store = new Storage();
 
 export async function http({ service = 'object', method = "execute", args }: { service?: 'common' | 'object', method?: string, args: any }) {
-    const isNative = !getPlatforms().includes('desktop');    
+    const isNative = !getPlatforms().includes('desktop');
 
     const storage = await store.create();
     const server = await storage.get('SERVER');
@@ -32,9 +32,15 @@ export async function http({ service = 'object', method = "execute", args }: { s
         }
     }
 
-    const { data } = await Http.request(options);
-    
-    return data;
+    try {
+        const { data } = await Http.request(options);
+        if (!data) {
+            throw new Error();
+        }
+        return data;
+    } catch (error:any) {
+        return { jsonrpc: '2.0', id: null, error }
+    }
 
 }
 

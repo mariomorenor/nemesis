@@ -69,10 +69,9 @@ let server = {
 const passwordReveal = ref(false);
 
 async function login() {
-
     const data: OdooResponse = await http({ service: 'common', method: 'login', args: [server.database, user.email, user.password] });
-    console.log("err", data);
-
+    console.log(data);
+    
     if (data.error) {
         presentToast({ message: "Ocurrió un error" })
         return;
@@ -94,6 +93,7 @@ async function login() {
     await storage.set('USER', Object.assign({}, u));
 
     router.replace({ name: 'Home' })
+
 }
 
 async function getUserAPI(id: number): Promise<User> {
