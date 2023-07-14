@@ -8,7 +8,10 @@
             </ion-item>
             <ion-item>
                 <ion-icon :icon="lockClosed" slot="start"></ion-icon>
-                <ion-input v-model="user.password" label="Contraseña" label-placement="floating"></ion-input>
+                <ion-input v-model="user.password" :type="passwordReveal ? 'text' : 'password'" label="Contraseña"
+                    label-placement="floating"></ion-input>
+                <ion-icon @click="passwordReveal = !passwordReveal" slot="end"
+                    :icon="passwordReveal ? eyeOff : eye"></ion-icon>
             </ion-item>
             <div class="login-button-container">
                 <ion-button @click="login()">Iniciar Sesión</ion-button>
@@ -23,37 +26,81 @@
 </template>
 
 <script lang="ts" setup>
-import { IonPage, IonContent, IonImg, IonItem, IonInput, IonIcon, IonButton, IonRouterOutlet } from '@ionic/vue';
-import { person, lockClosed, cog } from 'ionicons/icons';
+import { IonPage, IonContent, IonImg, IonItem, IonInput, IonIcon, IonButton } from '@ionic/vue';
+import { person, lockClosed, cog, eye, eyeOff } from 'ionicons/icons';
+import { onBeforeMount, reactive, ref } from 'vue';
+
+import { OdooResponse, User } from '@/models/models';
+import { http, presentToast } from '@/common/index'
+
+// Hooks
+onBeforeMount(async () => {
+    storage = await store.create();
+    server = await storage.get("SERVER");
+    const login = await storage.get('LOGIN');
+
+    if (login) {
+        router.replace({ name: 'Home' });
+    }
+
+});
+
+
+// Storage
+import { Storage } from '@ionic/storage';
+const store = new Storage();
+let storage: Storage;
 
 // Router
 import { useRouter } from 'vue-router';
 const router = useRouter();
 
-// Global Store
-import { useMainStore } from '@/store/index';
-const main = useMainStore();
 
+const user = reactive({
+    email: "stecnico@pucesd.edu.ec",
+    password: "825374200M@rio",
+});
 
-// Local Store
-const user = {
-    email: "",
-    password: ""
+let server = {
+    url: "",
+    database: ""
 }
 
-async function login() {
-    const { data } = await main.http({ service: 'common', method: 'login', args: [main.server.database, user.email, user.password] });
+const passwordReveal = ref(false);
 
-    if (data.hasOwnProperty('error')) {
-        main.presentToast({ message: "Ocurrió un error" })
+async function login() {
+
+    const data: OdooResponse = await http({ service: 'common', method: 'login', args: [server.database, user.email, user.password] });
+    console.log("err", data);
+
+    if (data.error) {
+        presentToast({ message: "Ocurrió un error" })
         return;
     }
 
     if (data.result == false) {
-        main.presentToast({ message: "Credenciales Inválidas" })
+        presentToast({ message: "Credenciales Inválidas" })
         return;
     }
 
+    await storage.set('USER', {
+        id: data.result,
+        password: user.password
+    })
+
+    const u = await getUserAPI(data.result);
+
+    await storage.set('LOGIN', true);
+    await storage.set('USER', Object.assign({}, u));
+
+    router.replace({ name: 'Home' })
+}
+
+async function getUserAPI(id: number): Promise<User> {
+    const response: OdooResponse = await http({ args: ['res.users', 'search_read', [['id', '=', id]]] });
+
+
+    return response.result[0];
 }
 
 

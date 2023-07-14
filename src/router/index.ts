@@ -2,9 +2,7 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import LoginPage from '../views/Login/LoginPage.vue';
-
-import { useMainStore } from '@/store/index';
-
+import ConfigLoginPage from '../views/Login/Config.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -15,14 +13,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/home',
     name: 'Home',
     component: HomePage,
-    beforeEnter: async (to, from, next) => {
-      const main = useMainStore();
-      
-      if (!main.login) {
-        next({ name: 'Login' })
-      }
-
-    }
   },
   {
     path: '/login',
@@ -32,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/config',
     name: 'Config',
-    component: () => import('../views/Login/Config.vue')
+    component: ConfigLoginPage
   }
 ]
 
