@@ -2,9 +2,10 @@ import { getPlatforms, toastController } from '@ionic/vue';
 import { ExceptionCode, CapacitorHttp as Http, HttpOptions, HttpResponse } from '@capacitor/core';
 
 import { Storage } from '@ionic/storage';
+import { OdooResponse } from '@/models/models';
 const store = new Storage();
 
-export async function http({ service = 'object', method = "execute", args }: { service?: 'common' | 'object', method?: string, args: any }) {
+export async function http({ service = 'object', method = "execute", args, endpoint }: { service?: 'common' | 'object' | 'any', method?: string, args: any, endpoint: string }) {
     const isNative = !getPlatforms().includes('desktop');
 
     const storage = await store.create();
@@ -18,7 +19,7 @@ export async function http({ service = 'object', method = "execute", args }: { s
 
     const options: HttpOptions = {
         method: 'POST',
-        url: isNative ? `${server.url}/jsonrpc` : "/jsonrpc",
+        url: isNative ? `${server.url}${endpoint}` : endpoint,
         headers: { 'Content-Type': 'application/json' },
         data: {
             jsonrpc: '2.0',
@@ -33,12 +34,15 @@ export async function http({ service = 'object', method = "execute", args }: { s
     }
 
     try {
-        const { data } = await Http.request(options);
+        const response = await Http.request(options);
+        const data: OdooResponse = response.data;
+        console.log(response);
+        
         if (!data) {
             throw new Error();
         }
         return data;
-    } catch (error:any) {
+    } catch (error: any) {
         return { jsonrpc: '2.0', id: null, error }
     }
 

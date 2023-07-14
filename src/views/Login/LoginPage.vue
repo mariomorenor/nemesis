@@ -69,9 +69,8 @@ let server = {
 const passwordReveal = ref(false);
 
 async function login() {
-    const data: OdooResponse = await http({ service: 'common', method: 'login', args: [server.database, user.email, user.password] });
-    console.log(data);
-    
+    const data: OdooResponse = await http({ endpoint: '/jsonrpc', service: 'common', method: 'login', args: [server.database, user.email, user.password] });
+
     if (data.error) {
         presentToast({ message: "Ocurrió un error" })
         return;
@@ -92,13 +91,17 @@ async function login() {
     await storage.set('LOGIN', true);
     await storage.set('USER', Object.assign({}, u));
 
-    router.replace({ name: 'Home' })
+    // router.replace({ name: 'Home' })
 
 }
 
 async function getUserAPI(id: number): Promise<User> {
-    const response: OdooResponse = await http({ args: ['res.users', 'search_read', [['id', '=', id]]] });
+    // const response: OdooResponse = await http({ endpoint: '/web/session/get_session_info', args: ['res.users', 'search_read', [['id', '=', id]]] });
 
+    // return response.result[0];
+    const response: OdooResponse = await http({ endpoint: '/web/session/get_session_info', service: 'any', args: [] });
+
+    console.log(response);
 
     return response.result[0];
 }

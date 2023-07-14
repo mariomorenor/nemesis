@@ -3,6 +3,8 @@ export interface User {
     display_name?: string,
     email?: string,
     password?: string,
+    avatar_256?: string,
+    avatar_128?: string,
 }
 
 export interface OdooResponse {

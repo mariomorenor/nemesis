@@ -1,30 +1,16 @@
 <template>
   <ion-page>
-    <ion-menu content-id="main-content">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Menu Content</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-list lines="full">
-
-          <ion-item router-link="/home" color="primary">
-            <ion-label >asdsa</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-content>
-    </ion-menu>
-
+    <main-menu></main-menu>
     <ion-page id="main-content">
-      <ion-router-outlet></ion-router-outlet>
+      posi
     </ion-page>
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { IonContent, IonHeader, IonPage, IonList, IonTitle, IonToolbar, IonRouterOutlet, IonMenu, IonButtons, IonMenuButton, IonLabel, IonItem } from '@ionic/vue';
-import { onBeforeMount, reactive } from 'vue';
+import { onBeforeMount, onMounted, reactive } from 'vue';
+import MainMenu from '@/components/MainMenu.vue';
 
 // Router
 import { useRouter } from 'vue-router';
@@ -48,6 +34,11 @@ onBeforeMount(async () => {
   user = await storage.get('USER');
 
 });
+
+onMounted(() => {
+
+});
+
 
 let user = reactive({});
 
