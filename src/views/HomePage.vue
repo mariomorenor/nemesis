@@ -35,10 +35,6 @@ onBeforeMount(async () => {
 
 });
 
-onMounted(() => {
-
-});
-
 
 let user = reactive({});
 

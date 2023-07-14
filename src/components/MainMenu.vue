@@ -1,9 +1,13 @@
 <template>
     <ion-menu content-id="main-content">
         <ion-header>
-            <ion-img :src="user_img" ></ion-img>
-            <div class="ion-padding">
-                <ion-label>{{ user.display_name }}</ion-label>
+            <ion-img :src="user_img" class="img-profile"></ion-img>
+            <div class="ion-padding name-container">
+                <ion-label>{{ user.name }}</ion-label>
+                <br>
+                <ion-button @click="logOut()" fill="clear" size="small"><ion-icon slot="start"
+                        :icon="logOutOutline"></ion-icon>Cerrar
+                    Sesión</ion-button>
             </div>
         </ion-header>
         <ion-content class="ion-padding"></ion-content>
@@ -11,12 +15,21 @@
 </template>
 
 <script lang="ts" setup>
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonImg, IonLabel, IonItem } from '@ionic/vue';
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonImg, IonLabel, IonItem, IonButton, IonIcon } from '@ionic/vue';
 import { onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { logOutOutline } from 'ionicons/icons';
+
+// Interfaces
+import { User } from '@/models/models';
+
+// Common
+import {presentAlert} from '@/common/index';
+
+// Router
+import router from '@/router';
 
 // Storage
 import { Storage } from '@ionic/storage';
-import { User } from '@/models/models';
 const store = new Storage();
 let storage: Storage;
 
@@ -25,7 +38,6 @@ let storage: Storage;
 onBeforeMount(async () => {
     storage = await store.create();
     user.value = await storage.get('USER');
-    user_img.value = `data:image/png;base64,${user.value.avatar_256}`;
 });
 
 
@@ -34,4 +46,28 @@ onBeforeMount(async () => {
 var user = ref<User>({});
 var user_img = ref('/assets/images/profile.png');
 
+
+async function logOut() {
+
+    presentAlert({message:'¿Está Seguro de cerrar la sesión?'})
+
+    // await storage.set('LOGIN', false);
+    // router.replace({ name: 'Login' });
+}
+
+
+
 </script>
+
+<style lang="scss" scoped>
+.img-profile {
+    width: 45%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 5%;
+}
+
+.name-container {
+    text-align: center;
+}
+</style>

@@ -69,7 +69,7 @@ let server = {
 const passwordReveal = ref(false);
 
 async function login() {
-    const data: OdooResponse = await http({
+    const response = await http({
         endpoint: '/web/session/authenticate',
         args: {
             db: server.database,
@@ -78,11 +78,12 @@ async function login() {
         }
     });
 
+    const data: OdooResponse = response.data
+
     if (data.error) {
         presentToast({ message: data.error.message })
         return;
     }
-
 
     await storage.set('LOGIN', true);
     await storage.set('USER', Object.assign({}, data.result));
