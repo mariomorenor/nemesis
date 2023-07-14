@@ -11,7 +11,10 @@ export default defineConfig({
   ],
   server:{
     proxy:{
-      '/jsonrpc': 'http://localhost:8069'
+      '/api': {
+        target: 'http://localhost:8069',
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
     }
   },
   resolve: {

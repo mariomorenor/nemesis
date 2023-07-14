@@ -69,41 +69,26 @@ let server = {
 const passwordReveal = ref(false);
 
 async function login() {
-    const data: OdooResponse = await http({ endpoint: '/jsonrpc', service: 'common', method: 'login', args: [server.database, user.email, user.password] });
+    const data: OdooResponse = await http({
+        endpoint: '/web/session/authenticate',
+        args: {
+            db: server.database,
+            login: user.email,
+            password: user.password
+        }
+    });
 
     if (data.error) {
-        presentToast({ message: "Ocurrió un error" })
+        presentToast({ message: data.error.message })
         return;
     }
 
-    if (data.result == false) {
-        presentToast({ message: "Credenciales Inválidas" })
-        return;
-    }
-
-    await storage.set('USER', {
-        id: data.result,
-        password: user.password
-    })
-
-    const u = await getUserAPI(data.result);
 
     await storage.set('LOGIN', true);
-    await storage.set('USER', Object.assign({}, u));
+    await storage.set('USER', Object.assign({}, data.result));
 
-    // router.replace({ name: 'Home' })
+    router.replace({ name: 'Home' });
 
-}
-
-async function getUserAPI(id: number): Promise<User> {
-    // const response: OdooResponse = await http({ endpoint: '/web/session/get_session_info', args: ['res.users', 'search_read', [['id', '=', id]]] });
-
-    // return response.result[0];
-    const response: OdooResponse = await http({ endpoint: '/web/session/get_session_info', service: 'any', args: [] });
-
-    console.log(response);
-
-    return response.result[0];
 }
 
 

@@ -1,50 +1,44 @@
 import { getPlatforms, toastController } from '@ionic/vue';
-import { ExceptionCode, CapacitorHttp as Http, HttpOptions, HttpResponse } from '@capacitor/core';
+import {  CapacitorHttp as Http, HttpOptions } from '@capacitor/core';
 
 import { Storage } from '@ionic/storage';
-import { OdooResponse } from '@/models/models';
 const store = new Storage();
 
-export async function http({ service = 'object', method = "execute", args, endpoint }: { service?: 'common' | 'object' | 'any', method?: string, args: any, endpoint: string }) {
+export async function http({ endpoint, args }: { endpoint: string, args: any, }) {
     const isNative = !getPlatforms().includes('desktop');
 
     const storage = await store.create();
     const server = await storage.get('SERVER');
 
-    if (service == 'object') {
-        const user = await storage.get('USER');
-        const data = [server.database, user.id, user.password];
-        args = data.concat(args);
-    }
-
     const options: HttpOptions = {
         method: 'POST',
-        url: isNative ? `${server.url}${endpoint}` : endpoint,
+        url: isNative ? `${server.url}${endpoint}` : `/api/${endpoint}`,
         headers: { 'Content-Type': 'application/json' },
         data: {
-            jsonrpc: '2.0',
-            method: 'call',
-            params: {
-                service,
-                method,
-                args
-            },
-            id: getRandomIntInclusive(1000, 9999)
+            id: getRandomInt(1000, 9999),
+            params: args,
         }
     }
 
-    try {
-        const response = await Http.request(options);
-        const data: OdooResponse = response.data;
-        console.log(response);
-        
-        if (!data) {
-            throw new Error();
+    const response = await Http.request(options);
+    
+    if (response.status == 500) {
+        return {
+            error: {
+                message: 'Problemas con el servidor'
+            }
         }
-        return data;
-    } catch (error: any) {
-        return { jsonrpc: '2.0', id: null, error }
     }
+
+    if (response.data.error) {
+        return {
+            error: response.data.error.data
+        }
+    }
+    
+    return response.data
+
+
 
 }
 
@@ -60,9 +54,8 @@ export async function presentToast({ position = 'bottom', message, duration = 10
 
 }
 
-function getRandomIntInclusive(min: number, max: number): number {
+function getRandomInt(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
 }
-
