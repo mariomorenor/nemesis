@@ -1,30 +1,30 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
+    <ion-menu content-id="main-content">
+      <ion-header>
         <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
+          <ion-title>Menu Content</ion-title>
         </ion-toolbar>
       </ion-header>
+      <ion-content>
+        <ion-list lines="full">
 
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer"
-            href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
-    </ion-content>
+          <ion-item router-link="/home" color="primary">
+            <ion-label >asdsa</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+
+    <ion-page id="main-content">
+      <ion-router-outlet></ion-router-outlet>
+    </ion-page>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-import { onBeforeMount } from 'vue';
+import { IonContent, IonHeader, IonPage, IonList, IonTitle, IonToolbar, IonRouterOutlet, IonMenu, IonButtons, IonMenuButton, IonLabel, IonItem } from '@ionic/vue';
+import { onBeforeMount, reactive } from 'vue';
 
 // Router
 import { useRouter } from 'vue-router';
@@ -45,7 +45,11 @@ onBeforeMount(async () => {
     router.replace({ name: 'Login' })
   }
 
+  user = await storage.get('USER');
+
 });
+
+let user = reactive({});
 
 
 

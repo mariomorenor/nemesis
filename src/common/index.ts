@@ -9,9 +9,9 @@ export async function http({ service = 'object', method = "execute", args }: { s
 
     const storage = await store.create();
     const server = await storage.get('SERVER');
-    const user = await storage.get('USER');
 
     if (service == 'object') {
+        const user = await storage.get('USER');
         const data = [server.database, user.id, user.password];
         args = data.concat(args);
     }
