@@ -12,7 +12,7 @@ export async function http({ endpoint, args }: { endpoint: string, args: any, })
 
     const options: HttpOptions = {
         method: 'POST',
-        url: isNative ? `${server.url}${endpoint}` : `/api/${endpoint}`,
+        url: isNative ? `${server.url}${endpoint}` : `${window.location.origin}/api/${endpoint}`,
         headers: { 'Content-Type': 'application/json', "Accept": "application/json" },
         data: {
             id: getRandomInt(1000, 9999),
