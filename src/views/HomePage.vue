@@ -2,8 +2,24 @@
   <ion-page>
     <main-menu></main-menu>
     <ion-page id="main-content">
-      <ion-content>
-        asd
+      <ion-header :translucent="true">
+        <ion-toolbar>
+          <ion-buttons>
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content :fullscreen="true">
+        <ion-header collapse="condense">
+          <ion-toolbar>
+            <ion-title size="large">Blank</ion-title>
+          </ion-toolbar>
+        </ion-header>
+
+        <div id="container">
+          <strong>Bienvenido!</strong>
+          <p>Por favor, seleccione una opción del menú lateral</p>
+        </div>
       </ion-content>
     </ion-page>
   </ion-page>
