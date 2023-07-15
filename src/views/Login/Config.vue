@@ -29,15 +29,16 @@
 <script setup lang="ts">
 import { IonPage, IonContent, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonItem, IonInput, IonIcon, IonButton } from '@ionic/vue';
 import { server as serv, link, save } from 'ionicons/icons';
-import { onMounted, reactive } from 'vue';
+import { onBeforeMount, reactive } from 'vue';
 
 
 import { presentToast } from '@/common';
 
 // Hooks
 
-onMounted(async () => {
+onBeforeMount(async () => {
     storage = await store.create();
+    server = await storage.get('SERVER');
 });
 
 // ************************ //
@@ -48,7 +49,7 @@ const store = new Storage();
 let storage: Storage;
 
 // Local Store
-const server = reactive({
+var server = reactive({
     url: '',
     database: ''
 });
@@ -56,7 +57,7 @@ const server = reactive({
 
 // Save config
 async function saveConfig() {
-    storage.set("SERVER", Object.assign({}, server));
+    await storage.set("SERVER", Object.assign({}, server));
 
     presentToast({ message: "Guardado con Éxito!" });
 
