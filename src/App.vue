@@ -38,8 +38,8 @@ const values = [
   {
     key: 'SERVER',
     value: {
-      url: '',
-      database: ''
+      url: 'https://unitec.pucesd.edu.ec',
+      database: 'pucesd'
     }
   },
   {
