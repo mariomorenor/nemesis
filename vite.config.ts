@@ -9,10 +9,10 @@ export default defineConfig({
     vue(),
     legacy()
   ],
-  server:{
-    proxy:{
+  server: {
+    proxy: {
       '/api': {
-        target: 'http://localhost:8069',
+        target: 'http://127.0.0.1:8069',
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     }
