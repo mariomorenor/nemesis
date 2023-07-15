@@ -59,8 +59,8 @@ const router = useRouter();
 
 
 const user = reactive({
-    email: "stecnico@pucesd.edu.ec",
-    password: "825374200M@rio",
+    email: "",
+    password: "",
 });
 
 let server = reactive({
