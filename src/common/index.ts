@@ -50,7 +50,7 @@ export async function http({ endpoint, args }: { endpoint: string, args: any, })
 
 }
 
-export async function presentToast({ position = 'bottom', message, duration = 1000 }: { position: 'bottom' | 'middle' | 'top', message: string, duration?: number }) {
+export async function presentToast({ position = 'bottom', message, duration = 1000 }: { position?: 'bottom' | 'middle' | 'top', message: string, duration?: number }) {
 
     const toast = await toastController.create({
         position,
