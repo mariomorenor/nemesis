@@ -2,7 +2,7 @@
     <ion-page>
         <ion-content class="ion-padding">
             <div class="img-container">
-                <img src="assets/images/nemesis.png" />
+                <img src="/assets/images/nemesis.png" />
             </div>
             <ion-item>
                 <ion-icon slot="start" :icon="person"></ion-icon>
