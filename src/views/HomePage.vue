@@ -2,7 +2,9 @@
   <ion-page>
     <main-menu></main-menu>
     <ion-page id="main-content">
-      posi
+      <ion-content>
+        asd
+      </ion-content>
     </ion-page>
   </ion-page>
 </template>

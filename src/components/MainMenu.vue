@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonImg, IonLabel, IonItem, IonButton, IonIcon } from '@ionic/vue';
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonImg, IonLabel, IonItem, IonButton, IonIcon, AlertButton } from '@ionic/vue';
 import { onBeforeMount, onMounted, reactive, ref } from 'vue';
 import { logOutOutline } from 'ionicons/icons';
 
@@ -23,7 +23,7 @@ import { logOutOutline } from 'ionicons/icons';
 import { User } from '@/models/models';
 
 // Common
-import {presentAlert} from '@/common/index';
+import { presentAlert } from '@/common/index';
 
 // Router
 import router from '@/router';
@@ -49,10 +49,22 @@ var user_img = ref('/assets/images/profile.png');
 
 async function logOut() {
 
-    presentAlert({message:'¿Está Seguro de cerrar la sesión?'})
+    const buttons: AlertButton[] = [
+        {
+            text: 'Aceptar',
+            handler: async () => {
+                await storage.set('LOGIN', false);
+                router.replace({ name: 'Login' });
+            }
+        },
+        {
+            text: 'Cancelar',
+            role: 'cancel'
+        }
+    ]
 
-    // await storage.set('LOGIN', false);
-    // router.replace({ name: 'Login' });
+    presentAlert({ message: '¿Está Seguro de cerrar la sesión?', buttons });
+
 }
 
 
@@ -69,5 +81,6 @@ async function logOut() {
 
 .name-container {
     text-align: center;
+    color: black;
 }
 </style>

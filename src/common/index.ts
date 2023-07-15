@@ -62,28 +62,14 @@ export async function presentToast({ position = 'bottom', message, duration = 10
 
 }
 
-export async function presentAlert({ message, buttons = [] }: { message: string, buttons?: AlertButton[] }) {
-
-    if (buttons.length == 0) {
-        buttons = []
-        buttons.push({
-            text: 'Aceptar',
-            handler: () => {
-                return true
-            }
-        });
-        buttons.push({
-            text: 'Cancelar',
-            role: 'cancel'
-        });
-    }
+export async function presentAlert({ message, buttons = [] }: { message: string, buttons: AlertButton[] }) {
 
     const alert = await alertController.create({
         message,
         buttons
     });
 
-    alert.present();
+   return await alert.present();
 }
 
 function getRandomInt(min: number, max: number): number {

@@ -1,7 +1,9 @@
 <template>
     <ion-page>
         <ion-content class="ion-padding">
-            <ion-img src="assets/images/nemesis.png"></ion-img>
+            <div class="img-container">
+                <img src="assets/images/nemesis.png" />
+            </div>
             <ion-item>
                 <ion-icon slot="start" :icon="person"></ion-icon>
                 <ion-input v-model="user.email" label="Usuario" label-placement="floating"></ion-input>
@@ -61,14 +63,17 @@ const user = reactive({
     password: "825374200M@rio",
 });
 
-let server = {
+let server = reactive({
     url: "",
     database: ""
-}
+})
 
 const passwordReveal = ref(false);
 
 async function login() {
+
+    server = await storage.get('SERVER');
+
     const response = await http({
         endpoint: '/web/session/authenticate',
         args: {
@@ -92,11 +97,20 @@ async function login() {
 
 }
 
-
-
 </script>
 
 <style lang="scss" scoped>
+.img-container {
+    width: 100vw;
+    display: flex;
+
+    & img {
+        margin-left: auto;
+        margin-right: auto;
+        // width: 80%;
+    }
+}
+
 .login-button-container {
     display: flex;
     margin-top: 10px;
