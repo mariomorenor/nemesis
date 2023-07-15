@@ -10,14 +10,21 @@
                     Sesión</ion-button>
             </div>
         </ion-header>
-        <ion-content class="ion-padding"></ion-content>
+        <ion-content>
+            <ion-list lines='full'>
+                <ion-item >
+                    <ion-icon slot="start" :icon="time"></ion-icon>
+                    <ion-label><strong>Asistencias</strong></ion-label>
+                </ion-item>
+            </ion-list>
+        </ion-content>
     </ion-menu>
 </template>
 
 <script lang="ts" setup>
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonImg, IonLabel, IonItem, IonButton, IonIcon, AlertButton } from '@ionic/vue';
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonImg, IonLabel, IonItem, IonButton, IonIcon, AlertButton, IonList } from '@ionic/vue';
 import { onBeforeMount, onMounted, reactive, ref } from 'vue';
-import { logOutOutline } from 'ionicons/icons';
+import { logOutOutline, time, timeOutline } from 'ionicons/icons';
 
 // Interfaces
 import { User } from '@/models/models';
