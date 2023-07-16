@@ -23,6 +23,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/config',
     name: 'Config',
     component: ConfigLoginPage
+  },
+  {
+    path:'/attendance',
+    name:'Attendance',
+    component: ()=>import('@/views/AttendancePage.vue')
   }
 ]
 
