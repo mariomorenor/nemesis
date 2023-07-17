@@ -32,7 +32,7 @@ import { IonPage, IonContent, IonImg, IonItem, IonInput, IonIcon, IonButton } fr
 import { person, lockClosed, cog, eye, eyeOff } from 'ionicons/icons';
 import { onBeforeMount, reactive, ref } from 'vue';
 
-import { OdooResponse, User } from '@/models/models';
+import { OdooResponse } from '@/models/models';
 import { http, presentToast } from '@/common/index'
 
 // Hooks
@@ -107,7 +107,7 @@ async function login() {
     & img {
         margin-left: auto;
         margin-right: auto;
-        // width: 80%;
+        padding-right: 2rem ;
     }
 }
 
