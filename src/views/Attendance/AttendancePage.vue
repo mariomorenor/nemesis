@@ -1,7 +1,7 @@
 <template>
     <ion-page>
         <main-menu></main-menu>
-        <filter-modal :showModal="showFilterModal" @closeModal="setFilters"></filter-modal>
+        <filter-modal :dates="dates" :showModal="showFilterModal" @closeModal="setFilters"></filter-modal>
         <ion-page id="main-content">
             <ion-header>
                 <ion-toolbar>
@@ -17,16 +17,13 @@
                 </ion-toolbar>
             </ion-header>
             <ion-content>
-                <ion-card>
-                    <ion-card-content>
-
-                    </ion-card-content>
-                </ion-card>
-
+                <ion-list>
+                    <ion-item v-for="attendace in attendaces">
+                        <ion-label><strong>Marcación:</strong> {{ attendace.fecha_hora }}</ion-label>
+                    </ion-item>
+                </ion-list>
                 <ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
-                    <ion-refresher-content>
-
-                    </ion-refresher-content>
+                    <ion-refresher-content></ion-refresher-content>
                 </ion-refresher>
             </ion-content>
         </ion-page>
@@ -39,22 +36,60 @@ import { IonPage, IonHeader, IonToolbar, IonLabel, IonContent, IonButtons, IonMe
 import MainMenu from '@/components/MainMenu.vue';
 import FilterModal from './FilterModal.vue';
 import { filter } from 'ionicons/icons';
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
+
+import moment from 'moment';
+import { OdooResponse } from '@/models/models';
+import { http } from '@/common';
+
+
+// Hooks
+onBeforeMount(() => {
+    getAttendances();
+})
+
 
 function handleRefresh(event: any) {
 
-    event.target.complete();
+
+    getAttendances().then(() => {
+        event.target.complete();
+    });
+
 }
 
 // Local Store
 
 var showFilterModal = ref(false);
+const attendaces = ref<any>([]);
 
 
-
-function setFilters(values: any) {
+function setFilters(dates_modal: any) {
     showFilterModal.value = false;
 
+    dates.value.startDate = dates_modal.dates.startDate;
+    dates.value.endDate = dates_modal.dates.endDate;
+
+
+    getAttendances();
 }
+
+const dates = ref({
+    startDate: moment().startOf('month').format("Y-MM-DD"),
+    endDate: moment().format("Y-MM-DD")
+})
+
+
+async function getAttendances() {
+    const response = await http({
+        endpoint: 'racetime/api/marcaciones', args: {
+            dates: dates.value
+        }
+    });
+    console.log(response.data);
+
+    attendaces.value = [...response.data.result]
+}
+
 
 </script>
