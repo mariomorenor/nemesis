@@ -33,7 +33,7 @@ import { person, lockClosed, cog, eye, eyeOff } from 'ionicons/icons';
 import { onBeforeMount, reactive, ref } from 'vue';
 
 import { OdooResponse } from '@/models/models';
-import { http, presentToast } from '@/common/index'
+import { http, presentToast, showLoading } from '@/common/index'
 
 // Hooks
 onBeforeMount(async () => {
@@ -72,6 +72,8 @@ const passwordReveal = ref(false);
 
 async function login() {
 
+    const loading = await showLoading({ message: 'Iniciando sesión...' });
+
     server = await storage.get('SERVER');
 
     const response = await http({
@@ -87,12 +89,15 @@ async function login() {
 
     if (data.error) {
         presentToast({ message: data.error.message })
+        loading.dismiss();
         return;
     }
 
     await storage.set('LOGIN', true);
     await storage.set('USER', Object.assign({}, data.result));
-
+    
+    loading.dismiss();
+    
     router.replace({ name: 'Home' });
 
 }
@@ -107,7 +112,7 @@ async function login() {
     & img {
         margin-left: auto;
         margin-right: auto;
-        padding-right: 2rem ;
+        padding-right: 2rem;
     }
 }
 
