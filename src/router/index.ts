@@ -27,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path:'/attendance',
     name:'Attendance',
-    component: ()=>import('@/views/AttendancePage.vue')
+    component: ()=>import('@/views/Attendance/AttendancePage.vue')
   }
 ]
 

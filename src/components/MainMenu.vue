@@ -25,9 +25,9 @@
 </template>
 
 <script lang="ts" setup>
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonImg, IonLabel, IonItem, IonButton, IonIcon, AlertButton, IonList, IonRippleEffect, IonAvatar } from '@ionic/vue';
-import { onBeforeMount, onMounted, reactive, ref } from 'vue';
-import { home, logOutOutline, menu, time, timeOutline } from 'ionicons/icons';
+import { IonMenu, IonHeader, IonContent, IonLabel, IonItem, IonButton, IonIcon, AlertButton, IonList, IonAvatar } from '@ionic/vue';
+import { onBeforeMount, ref } from 'vue';
+import { logOutOutline, time } from 'ionicons/icons';
 
 // Interfaces
 import { User } from '@/models/models';
@@ -54,8 +54,6 @@ onBeforeMount(async () => {
 
 // Local Store
 var user = ref<User>({});
-var user_img = ref('/assets/images/profile.png');
-
 
 async function logOut() {
 
@@ -89,26 +87,12 @@ const menuItems = ref([
         label: 'Asistencias',
         icon: time,
         routeName: 'Attendance'
-    },
-    {
-        label: 'Hi',
-        icon: time,
-        routeName: 'Home'
-    },
+    }
 ])
-
-
-
 
 </script>
 
 <style lang="scss" scoped>
-.img-profile {
-    width: 45%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-top: 5%;
-}
 
 .name-container {
     text-align: center;
