@@ -36,6 +36,8 @@ const router = useRouter();
 
 // Storage
 import { Storage } from '@ionic/storage';
+import { http } from '@/common';
+import { OdooResponse } from '@/models/models';
 const store = new Storage();
 let storage: Storage;
 
@@ -49,14 +51,20 @@ onBeforeMount(async () => {
     router.replace({ name: 'Login' })
   }
 
-  user = await storage.get('USER');
+  const server = await storage.get('SERVER');
+  const user = await storage.get('USER');
 
+  await http({
+    endpoint: '/web/session/authenticate',
+    args: {
+        db: server.database,
+        login: user.email,
+        password: user.password
+    }
 });
 
 
-let user = reactive({});
-
-
+});
 
 
 </script>
