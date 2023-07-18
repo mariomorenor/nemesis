@@ -62,7 +62,7 @@ import { onBeforeMount, ref } from 'vue';
 import moment from 'moment';
 
 moment.locale('es', {
-    weekdays: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo']
+    weekdays: [ 'Domingo','Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
 })
 
 import { http, showLoading } from '@/common';
@@ -117,7 +117,7 @@ async function getAttendances() {
 
     attendances.value = response.data.result.map((d: any) => {
         d.records.forEach((rec: any) => {
-            rec.fecha_hora = moment(rec.fecha_hora).subtract(5, 'hours').format('HH:mm:ss');
+            rec.fecha_hora = moment(rec.punch_time).format('HH:mm');
         });
         d.day = moment(d.fecha).format('dddd');
         return d
