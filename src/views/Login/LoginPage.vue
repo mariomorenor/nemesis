@@ -94,10 +94,10 @@ async function login() {
     }
 
     await storage.set('LOGIN', true);
-    await storage.set('USER', Object.assign({}, data.result));
-    
+    await storage.set('USER', Object.assign({ password: user.password, email: user.email }, data.result));
+
     loading.dismiss();
-    
+
     router.replace({ name: 'Home' });
 
 }
