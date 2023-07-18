@@ -110,7 +110,7 @@ const dates = ref({
 async function getAttendances() {
     const loading = await showLoading({ message: 'Cargando datos...' })
     const response = await http({
-        endpoint: 'racetime/api/marcaciones', args: {
+        endpoint: '/racetime/api/marcaciones', args: {
             dates: dates.value
         }
     });
