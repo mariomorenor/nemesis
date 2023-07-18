@@ -3,7 +3,7 @@
     <main-menu></main-menu>
     <ion-page id="main-content">
       <ion-header :translucent="true">
-        <ion-toolbar>
+        <ion-toolbar color="primary">
           <ion-buttons>
             <ion-menu-button></ion-menu-button>
           </ion-buttons>
