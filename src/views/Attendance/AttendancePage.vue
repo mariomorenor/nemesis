@@ -2,6 +2,7 @@
     <ion-page>
         <main-menu></main-menu>
         <filter-modal :dates="dates" :showModal="showFilterModal" @closeModal="setFilters"></filter-modal>
+        <edit-modal :showModal="showEditModal" :record="record" @closeModal="updateAttendance"></edit-modal>
         <ion-page id="main-content">
             <ion-header>
                 <ion-toolbar color="primary">
@@ -24,12 +25,12 @@
                                 <ion-label class="item-attendance">
                                     <h2><strong>Fecha:</strong> {{ attendance.fecha }} <small>{{ attendance.day }}</small>
                                     </h2>
-                                    <ion-chip color="primary" v-for="record in attendance.records">{{ record.fecha_hora
-                                    }}</ion-chip>
+                                    <ion-chip @click="openEditModal(record)" color="primary"
+                                        v-for="record in attendance.records">{{ record.hora }}</ion-chip>
                                 </ion-label>
                             </ion-item>
                             <ion-item-options>
-                                <ion-item-option  color="warning">
+                                <ion-item-option color="warning">
                                     <ion-icon :icon="warning" slot="icon-only"></ion-icon>
                                 </ion-item-option>
                             </ion-item-options>
@@ -54,15 +55,18 @@
 
 <script lang="ts" setup>
 import { IonPage, IonHeader, IonToolbar, IonLabel, IonContent, IonButtons, IonMenuButton, IonRefresher, IonRefresherContent, IonItem, IonList, IonButton, IonIcon, IonChip, IonItemSliding, IonItemOptions, IonItemOption } from '@ionic/vue';
+
 import MainMenu from '@/components/MainMenu.vue';
 import FilterModal from './FilterModal.vue';
+import EditModal from './EditModal.vue';
+
 import { filter, sad, warning } from 'ionicons/icons';
 import { onBeforeMount, ref } from 'vue';
 
 import moment from 'moment';
 
 moment.locale('es', {
-    weekdays: [ 'Domingo','Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+    weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
 })
 
 import { http, showLoading } from '@/common';
@@ -74,7 +78,6 @@ onBeforeMount(() => {
 
 function handleRefresh(event: any) {
 
-
     getAttendances().then(() => {
         event.target.complete();
     });
@@ -84,7 +87,9 @@ function handleRefresh(event: any) {
 // Local Store
 
 var showFilterModal = ref(false);
+var showEditModal = ref(false);
 const attendances = ref<any>([]);
+var record = ref<any>();
 
 
 async function setFilters(dates_modal: any) {
@@ -117,13 +122,22 @@ async function getAttendances() {
 
     attendances.value = response.data.result.map((d: any) => {
         d.records.forEach((rec: any) => {
-            rec.fecha_hora = moment(rec.punch_time).format('HH:mm');
+            rec.hora = moment(rec.punch_time).format('HH:mm');
         });
         d.day = moment(d.fecha).format('dddd');
         return d
     });
 
     loading.dismiss();
+}
+
+function openEditModal(rec: any) {
+    showEditModal.value = true;
+    record.value = rec;
+}
+
+async function updateAttendance() {
+    showEditModal.value = false;
 }
 
 
