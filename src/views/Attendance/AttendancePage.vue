@@ -29,9 +29,8 @@
                                 </ion-label>
                             </ion-item>
                             <ion-item-options>
-                                <ion-item-option color="warning">
-                                    Reportar
-                                    <ion-icon :icon="warning" slot="end"></ion-icon>
+                                <ion-item-option  color="warning">
+                                    <ion-icon :icon="warning" slot="icon-only"></ion-icon>
                                 </ion-item-option>
                             </ion-item-options>
                         </ion-item-sliding>
