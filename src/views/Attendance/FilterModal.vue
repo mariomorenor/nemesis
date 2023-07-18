@@ -1,7 +1,7 @@
 <template>
     <ion-modal :is-open="props.showModal">
         <ion-header>
-            <ion-toolbar>
+            <ion-toolbar color="primary">
                 <ion-buttons slot="start">
                     <ion-button @click="cancel()">Cancelar</ion-button>
                 </ion-buttons>
@@ -11,8 +11,8 @@
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
-        <ion-content class="ion-padding">
-            <ion-list>
+        <ion-content>
+            <ion-list lines="full">
                 <ion-item>
                     <ion-label>Fecha Inicio:</ion-label>
                     <ion-datetime-button datetime="start-date"></ion-datetime-button>
