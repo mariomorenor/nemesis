@@ -2,7 +2,7 @@
     <ion-menu content-id="main-content">
         <ion-header>
             <ion-avatar class="avatar">
-                <img src="/assets/images/avatar.svg" />
+                <img :src="user_img" ref="user_img_ref" />
             </ion-avatar>
             <div class="ion-padding name-container">
                 <ion-label>{{ user.name }}</ion-label>
@@ -48,12 +48,23 @@ let storage: Storage;
 onBeforeMount(async () => {
     storage = await store.create();
     user.value = await storage.get('USER');
+
+
+
+    user_img.value = `data:image/png;base64,${user.value.avatar_1920}`;
+    user_img_ref.value?.addEventListener('error', (error) => {
+        user_img.value = `data:image/svg+xml;base64,${user.value.avatar_1920}`;
+    })
+
 });
 
 
 
 // Local Store
 var user = ref<User>({});
+var user_img = ref("/assets/images/avatar.svg")
+var user_img_ref = ref<HTMLElement | null>()
+
 
 async function logOut() {
 
@@ -93,7 +104,6 @@ const menuItems = ref([
 </script>
 
 <style lang="scss" scoped>
-
 .name-container {
     text-align: center;
     color: black;

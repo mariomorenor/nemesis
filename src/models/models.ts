@@ -3,6 +3,7 @@ export interface User {
     name?: string,
     email?: string,
     password?: string,
+    avatar_1920?: string
 }
 
 export interface OdooResponse {
