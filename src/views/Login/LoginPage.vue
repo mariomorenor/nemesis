@@ -110,7 +110,6 @@ async function login() {
 
 async function getUserInfo() {
     const resp = await http({ endpoint: '/api/user-info', args: {} });
-    console.log(resp);
 
     return resp.data.result
 }
