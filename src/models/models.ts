@@ -13,3 +13,10 @@ export interface OdooResponse {
     error?: any,
     result?: any
 }
+
+export interface Biometric {
+    id: number,
+    name: string,
+    ip_address: string,
+    state?: boolean
+}

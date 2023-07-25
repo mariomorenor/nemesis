@@ -27,7 +27,7 @@
 <script lang="ts" setup>
 import { IonMenu, IonHeader, IonContent, IonLabel, IonItem, IonButton, IonIcon, AlertButton, IonList, IonAvatar } from '@ionic/vue';
 import { onBeforeMount, ref } from 'vue';
-import { logOutOutline, time } from 'ionicons/icons';
+import { fingerPrint, logOutOutline, time } from 'ionicons/icons';
 
 // Interfaces
 import { User } from '@/models/models';
@@ -55,6 +55,18 @@ onBeforeMount(async () => {
     user_img_ref.value?.addEventListener('error', (error) => {
         user_img.value = `data:image/svg+xml;base64,${user.value.avatar_1920}`;
     })
+
+    
+    // Setup Permissions
+    if (user.value.groups?.includes('biometricos.group_admin')) {
+        menuItems.value.push({
+            icon: fingerPrint,
+            label:'Biométricos',
+            routeName: 'Biometrics'
+        })
+    }
+
+
 
 });
 
@@ -99,8 +111,7 @@ const menuItems = ref([
         icon: time,
         routeName: 'Attendance'
     }
-])
-
+]);
 </script>
 
 <style lang="scss" scoped>

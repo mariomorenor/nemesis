@@ -25,9 +25,14 @@ const routes: Array<RouteRecordRaw> = [
     component: ConfigLoginPage
   },
   {
-    path:'/attendance',
-    name:'Attendance',
-    component: ()=>import('@/views/Attendance/AttendancePage.vue')
+    path: '/attendance',
+    name: 'Attendance',
+    component: () => import('@/views/Attendance/AttendancePage.vue')
+  },
+  {
+    path: '/biometrics',
+    name: 'Biometrics',
+    component: () => import('@/views/Biometrics/BiometricsPage.vue')
   }
 ]
 
