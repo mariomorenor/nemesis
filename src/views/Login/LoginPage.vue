@@ -94,11 +94,11 @@ async function login() {
     }
 
     await storage.set('LOGIN', true);
-    
+
     const user_info = await getUserInfo();
-    
-    
-    await storage.set('USER', Object.assign({ password: user.password, email: user.email }, user_info.user_info,user_info.groups, data.result));
+
+
+    await storage.set('USER', Object.assign({ password: user.password, email: user.email, groups: Object.values(user_info.groups), }, user_info.user_info, data.result));
 
 
 
@@ -111,7 +111,7 @@ async function login() {
 async function getUserInfo() {
     const resp = await http({ endpoint: '/api/user-info', args: {} });
     console.log(resp);
-    
+
     return resp.data.result
 }
 
