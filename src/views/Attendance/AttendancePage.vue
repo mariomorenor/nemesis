@@ -71,9 +71,17 @@ moment.locale('es', {
 
 import { http, showLoading } from '@/common';
 
+// Storage
+import { Storage } from '@ionic/storage';
+import { User } from '@/models/models';
+const store = new Storage();
+let storage: Storage;
+
 // Hooks
-onBeforeMount(() => {
+onBeforeMount( async () => {
+    storage = await store.create();
     getAttendances();
+    user.value = await storage.get('USER');
 })
 
 function handleRefresh(event: any) {
@@ -86,6 +94,7 @@ function handleRefresh(event: any) {
 
 // Local Store
 
+var user = ref<User>();
 var showFilterModal = ref(false);
 var showEditModal = ref(false);
 const attendances = ref<any>([]);
@@ -132,11 +141,15 @@ async function getAttendances() {
 }
 
 function openEditModal(rec: any) {
-    showEditModal.value = true;
-    record.value = rec;
+    if (user.value?.groups?.includes('racetime.group_admin')) {        
+        showEditModal.value = true;
+        record.value = rec;
+    }
+
 }
 
 async function updateAttendance() {
+    await getAttendances()
     showEditModal.value = false;
 }
 

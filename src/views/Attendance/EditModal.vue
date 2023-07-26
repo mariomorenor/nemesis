@@ -15,9 +15,12 @@
                     <ion-label>Marcacion:</ion-label>
                     <ion-datetime-button datetime="date"></ion-datetime-button>
                     <ion-modal :backdrop-dismiss="false" :keep-contents-mounted="true">
-                        <ion-datetime id="date" v-model="date" :show-default-buttons="true" done-text="Confirmar"
+                        <ion-datetime v-model="d.datetime" id="date" :show-default-buttons="true" done-text="Confirmar"
                             cancel-text="Cancelar"></ion-datetime>
                     </ion-modal>
+                </ion-item>
+                <ion-item>
+                    <ion-button @click="confirm()" slot="end">GUARDAR</ion-button>
                 </ion-item>
             </ion-list>
         </ion-content>
@@ -25,25 +28,42 @@
 </template>
 
 <script lang="ts" setup>
+import { http } from '@/common';
 import { IonModal, IonHeader, IonToolbar, IonButtons, IonButton, IonIcon, IonContent, IonList, IonItem, IonLabel, IonDatetimeButton, IonDatetime } from '@ionic/vue';
 import { arrowBack } from 'ionicons/icons';
 
 import moment from 'moment';
-import { ref } from 'vue';
+import { onUpdated, ref } from 'vue';
 
-const props = defineProps(['showModal','record']);
+const props = defineProps(['showModal', 'record']);
 const emit = defineEmits(['closeModal']);
-console.log(moment().format('Y-MM-DD HH:mm'));
 
-const d = moment().format('Y-MM-DDTHH:mm');
-var date = ref(d);
+const d = ref({
+    date: "",
+    time: "",
+    datetime: ""
+});
+
+onUpdated(() => {
+    changedDate();
+})
+
+function changedDate() {
+    d.value.date = moment(props.record.punch_time).format("Y-MM-DD");
+    d.value.time = moment(props.record.punch_time).format("HH:mm:ss");
+    d.value.datetime = `${d.value.date}T${d.value.time}`;
+}
+
 
 function cancel() {
     emit('closeModal', false);
 }
 
 function confirm() {
-    emit('closeModal');
+    http({ endpoint: '/api/racetime/actualizar-marcacion', args: { id_marcacion: props.record.id, datetime: d.value.datetime } })
+        .then(() => {
+            emit('closeModal');
+        });
 }
 
 
