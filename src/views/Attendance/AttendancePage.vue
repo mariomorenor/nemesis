@@ -141,7 +141,7 @@ async function getAttendances() {
 }
 
 function openEditModal(rec: any) {
-    if (user.value?.groups?.includes('racetime.group_admin')) {        
+    if (user.value?.groups?.includes('biometricos.group_admin')) {        
         showEditModal.value = true;
         record.value = rec;
     }
