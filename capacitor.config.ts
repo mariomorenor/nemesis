@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'jm.dev.nemesis',
   appName: 'nemesis',
   webDir: 'dist',
   server: {

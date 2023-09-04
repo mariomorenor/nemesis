@@ -1,7 +1,7 @@
 {
   "name": "nemesis",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -22,11 +22,13 @@
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
     "ionicons": "^7.0.0",
+    "moment": "^2.29.4",
     "pinia": "^2.1.4",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
+    "@capacitor/assets": "^2.0.4",
     "@capacitor/cli": "5.2.0",
     "@vitejs/plugin-legacy": "^4.0.2",
     "@vitejs/plugin-vue": "^4.0.0",

@@ -1,8 +1,14 @@
-import { AlertButton, alertController, getPlatforms, toastController } from '@ionic/vue';
+import { AlertButton, alertController, getPlatforms, loadingController, toastController } from '@ionic/vue';
 import { CapacitorHttp as Http, HttpOptions, HttpResponse, CapacitorCookies } from '@capacitor/core';
 
 import { Storage } from '@ionic/storage';
 const store = new Storage();
+
+function getRandomInt(min: number, max: number): number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+}
 
 export async function http({ endpoint, args }: { endpoint: string, args: any, }): Promise<HttpResponse> {
     const isNative = !getPlatforms().includes('desktop');
@@ -12,7 +18,7 @@ export async function http({ endpoint, args }: { endpoint: string, args: any, })
 
     const options: HttpOptions = {
         method: 'POST',
-        url: isNative ? `${server.url}${endpoint}` : `${window.location.origin}/api/${endpoint}`,
+        url: isNative ? `${server.url}${endpoint}` : `${window.location.origin}/api${endpoint}`,
         headers: { 'Content-Type': 'application/json', "Accept": "application/json" },
         data: {
             id: getRandomInt(1000, 9999),
@@ -69,11 +75,15 @@ export async function presentAlert({ message, buttons = [] }: { message: string,
         buttons
     });
 
-   return await alert.present();
+    return await alert.present();
 }
 
-function getRandomInt(min: number, max: number): number {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+export async function showLoading({ message, duration = 0 }: { message: string, duration?: number }) {
+    const loading = await loadingController.create({
+        message,
+        duration,
+    })
+
+    loading.present();
+    return loading
 }

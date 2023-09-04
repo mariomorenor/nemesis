@@ -32,8 +32,8 @@ import { IonPage, IonContent, IonImg, IonItem, IonInput, IonIcon, IonButton } fr
 import { person, lockClosed, cog, eye, eyeOff } from 'ionicons/icons';
 import { onBeforeMount, reactive, ref } from 'vue';
 
-import { OdooResponse, User } from '@/models/models';
-import { http, presentToast } from '@/common/index'
+import { OdooResponse } from '@/models/models';
+import { http, presentToast, showLoading } from '@/common/index'
 
 // Hooks
 onBeforeMount(async () => {
@@ -72,6 +72,8 @@ const passwordReveal = ref(false);
 
 async function login() {
 
+    const loading = await showLoading({ message: 'Iniciando sesión...' });
+
     server = await storage.get('SERVER');
 
     const response = await http({
@@ -87,14 +89,29 @@ async function login() {
 
     if (data.error) {
         presentToast({ message: data.error.message })
+        loading.dismiss();
         return;
     }
 
     await storage.set('LOGIN', true);
-    await storage.set('USER', Object.assign({}, data.result));
+
+    const user_info = await getUserInfo();
+
+
+    await storage.set('USER', Object.assign({ password: user.password, email: user.email, groups: Object.values(user_info.groups), }, user_info.user_info, data.result));
+
+
+
+    loading.dismiss();
 
     router.replace({ name: 'Home' });
 
+}
+
+async function getUserInfo() {
+    const resp = await http({ endpoint: '/api/user-info', args: {} });
+
+    return resp.data.result
 }
 
 </script>
@@ -107,7 +124,7 @@ async function login() {
     & img {
         margin-left: auto;
         margin-right: auto;
-        // width: 80%;
+        padding-right: 2rem;
     }
 }
 

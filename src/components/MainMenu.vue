@@ -1,7 +1,9 @@
 <template>
     <ion-menu content-id="main-content">
         <ion-header>
-            <ion-img :src="user_img" class="img-profile"></ion-img>
+            <ion-avatar class="avatar">
+                <img :src="user_img" ref="user_img_ref" />
+            </ion-avatar>
             <div class="ion-padding name-container">
                 <ion-label>{{ user.name }}</ion-label>
                 <br>
@@ -11,10 +13,11 @@
             </div>
         </ion-header>
         <ion-content>
-            <ion-list lines='full'>
-                <ion-item >
-                    <ion-icon slot="start" :icon="time"></ion-icon>
-                    <ion-label><strong>Asistencias</strong></ion-label>
+            <ion-list>
+                <ion-item @click="goTo(menuItem.routeName)" v-for="menuItem in menuItems" lines="full"
+                    :color="router.currentRoute.value.name == menuItem.routeName ? 'primary' : ''">
+                    <ion-icon slot="start" :icon="menuItem.icon"></ion-icon>
+                    <ion-label><strong> {{ menuItem.label }}</strong></ion-label>
                 </ion-item>
             </ion-list>
         </ion-content>
@@ -22,9 +25,9 @@
 </template>
 
 <script lang="ts" setup>
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonImg, IonLabel, IonItem, IonButton, IonIcon, AlertButton, IonList } from '@ionic/vue';
-import { onBeforeMount, onMounted, reactive, ref } from 'vue';
-import { logOutOutline, time, timeOutline } from 'ionicons/icons';
+import { IonMenu, IonHeader, IonContent, IonLabel, IonItem, IonButton, IonIcon, AlertButton, IonList, IonAvatar } from '@ionic/vue';
+import { onBeforeMount, ref } from 'vue';
+import { fingerPrint, logOutOutline, time } from 'ionicons/icons';
 
 // Interfaces
 import { User } from '@/models/models';
@@ -45,13 +48,34 @@ let storage: Storage;
 onBeforeMount(async () => {
     storage = await store.create();
     user.value = await storage.get('USER');
+
+
+
+    user_img.value = `data:image/png;base64,${user.value.avatar_1920}`;
+    user_img_ref.value?.addEventListener('error', (error) => {
+        user_img.value = `data:image/svg+xml;base64,${user.value.avatar_1920}`;
+    })
+
+    
+    // Setup Permissions
+    if (user.value.groups?.includes('biometricos.group_admin')) {
+        menuItems.value.push({
+            icon: fingerPrint,
+            label:'Biométricos',
+            routeName: 'Biometrics'
+        })
+    }
+
+
+
 });
 
 
 
 // Local Store
 var user = ref<User>({});
-var user_img = ref('/assets/images/profile.png');
+var user_img = ref("/assets/images/avatar.svg")
+var user_img_ref = ref<HTMLElement | null>()
 
 
 async function logOut() {
@@ -74,20 +98,33 @@ async function logOut() {
 
 }
 
+function goTo(route: string) {
+    router.replace({
+        name: route
+    })
+}
 
 
+const menuItems = ref([
+    {
+        label: 'Asistencias',
+        icon: time,
+        routeName: 'Attendance'
+    }
+]);
 </script>
 
 <style lang="scss" scoped>
-.img-profile {
-    width: 45%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-top: 5%;
-}
-
 .name-container {
     text-align: center;
     color: black;
+}
+
+.avatar {
+    margin: 12% auto 6% auto;
+
+    & img {
+        transform: scale(1.7);
+    }
 }
 </style>

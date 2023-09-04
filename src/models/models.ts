@@ -3,6 +3,8 @@ export interface User {
     name?: string,
     email?: string,
     password?: string,
+    avatar_1920?: string,
+    groups?: Array<String>
 }
 
 export interface OdooResponse {
@@ -10,4 +12,11 @@ export interface OdooResponse {
     id: number,
     error?: any,
     result?: any
+}
+
+export interface Biometric {
+    id: number,
+    name: string,
+    ip_address: string,
+    state?: boolean
 }
